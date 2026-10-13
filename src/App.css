@@ -1,0 +1,383 @@
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 10;
+  padding: 1rem;
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.site-header,
+.hero,
+.preview-section,
+.site-footer {
+  width: min(100% - 3rem, 1200px);
+  margin-inline: auto;
+}
+
+.site-header {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  text-decoration: none;
+}
+
+.logo span,
+.hero h1 span {
+  color: #b84300;
+}
+
+.navigation {
+  display: flex;
+  gap: 2rem;
+}
+
+.navigation a {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navigation a:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  padding-block: 4rem 6rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 1.25rem 0;
+  font-size: clamp(3.5rem, 6.5vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.065em;
+}
+
+.hero-description {
+  max-width: 420px;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #454039;
+}
+
+.hero-art {
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  border-radius: 48% 48% 2rem 2rem;
+  background: #ffdfb6;
+}
+
+.drink-can {
+  width: 180px;
+  height: 310px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border-top: 12px solid #dedbd5;
+  border-bottom: 10px solid #dedbd5;
+  border-radius: 2rem;
+  background: var(--orange);
+  color: var(--ink);
+  box-shadow: 18px 22px 0 rgb(36 34 31 / 10%);
+  transform: rotate(-12deg);
+}
+
+.can-brand {
+  font-size: 3.75rem;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+}
+
+.can-flavour {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.can-detail {
+  font-size: 0.65rem;
+}
+
+.art-caption {
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.preview-section {
+  padding-block: 4rem;
+  border-top: 1px solid rgb(36 34 31 / 20%);
+  scroll-margin-top: 2rem;
+}
+
+.preview-section h2 {
+  max-width: 650px;
+  margin-block: 1rem;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.05em;
+}
+
+.preview-section > p:last-child {
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-block: 2rem;
+  border-top: 1px solid rgb(36 34 31 / 20%);
+}
+
+.site-footer p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    flex-wrap: wrap;
+    padding-block: 1rem;
+  }
+
+  .menu-toggle {
+    display: block;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .navigation {
+    display: none;
+    width: 100%;
+    padding-block: 1rem;
+  }
+
+  .navigation.is-open {
+    display: flex;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding-block: 2rem 4rem;
+  }
+
+  .hero-art {
+    min-height: 420px;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+
+.flavour-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block: 2rem;
+}
+
+.flavour-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  padding: 0.9rem 1.25rem;
+  border: 2px solid #c9c0b3;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flavour-option:hover {
+  border-color: var(--ink);
+}
+
+.flavour-option.is-selected {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.flavour-swatch {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid rgb(36 34 31 / 25%);
+  border-radius: 50%;
+}
+
+.flavour-check {
+  font-size: 0.9rem;
+}
+
+.flavour-description {
+  max-width: 600px;
+  min-height: 130px;
+  padding: 1.5rem;
+  border: 1px solid #c9c0b3;
+  border-radius: 1rem;
+}
+
+.flavour-description h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.flavour-description p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.hero-art,
+.drink-can {
+  transition: background-color 200ms ease;
+}
+
+@media (max-width: 480px) {
+  .flavour-options {
+    flex-direction: column;
+  }
+
+  .flavour-option {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art,
+  .drink-can {
+    transition: none;
+  }
+}
+
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.ingredient-card {
+  padding: 2rem;
+  border: 1px solid #c9c0b3;
+  border-radius: 1.5rem;
+  background: #fff3de;
+}
+
+.ingredient-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ingredient-card h3 {
+  margin-block: 1.5rem 0.75rem;
+  font-size: 1.3rem;
+}
+
+.ingredient-card p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.faq-list {
+  max-width: 800px;
+  margin-top: 2rem;
+}
+
+.faq-item {
+  border-bottom: 1px solid #c9c0b3;
+}
+
+.faq-item summary {
+  padding-block: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.faq-item summary::marker {
+  color: #b84300;
+}
+
+.faq-item p {
+  max-width: 650px;
+  margin: 0;
+  padding-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+}

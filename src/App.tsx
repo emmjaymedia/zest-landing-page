@@ -39,11 +39,49 @@ const flavours: Flavour[] = [
   },
 ]
 
+const discoveryTopics = [
+  { title: 'Our flavours', keywords: 'orange lime berry fruit flavours', text: 'Three bold personalities. One bright side. Explore orange, lime, and berry in the hero above.', href: '#flavour-selector' },
+  { title: 'The Zest story', keywords: 'about story design brand', text: 'A little everyday optimism, bottled up in a colourful sparkling drink concept.', href: '#about' },
+  { title: 'Behind the bubbles', keywords: 'ingredients bubbles recipe sparkling water', text: 'Sparkling water, fruit-inspired flavours, and a playful finish. Discover what inspired the concept.', href: '#ingredients' },
+  { title: 'Good to know', keywords: 'faq buy questions portfolio concept', text: 'Curious about Zest? Get the answers, including what makes this a portfolio concept.', href: '#faq' },
+]
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
-
   const [selectedFlavourId, setSelectedFlavourId] =
   useState<FlavourId>('orange')
+
+  const [isCycling, setIsCycling] = useState(true)
+  const [artPaused, setArtPaused] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [activeTopic, setActiveTopic] = useState('')
+  const query = searchQuery.trim().toLowerCase()
+  const searchResults = discoveryTopics.filter((topic) =>
+    (!activeTopic || topic.title === activeTopic) &&
+    (!query || `${topic.title} ${topic.keywords} ${topic.text}`.toLowerCase().includes(query)),
+  )
+
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setReducedMotion(preference.matches)
+    update()
+    preference.addEventListener('change', update)
+    return () => preference.removeEventListener('change', update)
+  }, [])
+
+  useEffect(() => {
+    if (!isCycling || artPaused || reducedMotion) return
+    const timer = window.setInterval(() => {
+      if (document.hidden) return
+      setSelectedFlavourId((current) => {
+        const index = flavours.findIndex((flavour) => flavour.id === current)
+        return flavours[(index + 1) % flavours.length]!.id
+      })
+    }, 4500)
+    return () => window.clearInterval(timer)
+  }, [isCycling, artPaused, reducedMotion])
+
 
 const selectedFlavour =
   flavours.find((flavour) => flavour.id === selectedFlavourId) ?? flavours[0]!
@@ -181,6 +219,12 @@ const selectedFlavour =
         <div
   
   className="hero-art splash-art"
+  onMouseEnter={() => setArtPaused(true)}
+  onMouseLeave={() => setArtPaused(false)}
+  onFocusCapture={() => setArtPaused(true)}
+  onBlurCapture={(event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) setArtPaused(false)
+  }}
   style={{ backgroundColor: selectedFlavour.background }}
 >
   <div className="splash-stage" key={selectedFlavourId}>
@@ -204,11 +248,14 @@ const selectedFlavour =
         style={{ backgroundColor: flavour.colour }}
         aria-label={flavour.name}
         aria-pressed={flavour.id === selectedFlavourId}
-        onClick={() => setSelectedFlavourId(flavour.id)}
+        onClick={() => { setSelectedFlavourId(flavour.id); setIsCycling(false) }}
       />
     ))}
   </div>
-  <span className="art-caption" role="status" aria-label={`${selectedFlavour.name} selected`}>Meet your bright side.</span>
+  <div className="art-bottom">
+    <span className="art-caption">Meet your bright side.</span>
+    {!reducedMotion && <button className="cycle-toggle" type="button" onClick={() => setIsCycling((current) => !current)} aria-label={isCycling ? 'Pause automatic flavour cycling' : 'Start automatic flavour cycling'}>{isCycling ? 'Ⅱ' : '▶'}</button>}
+  </div>
 </div>
 </section>
 
@@ -259,15 +306,22 @@ const selectedFlavour =
 </section>
 
 
-        <section className="preview-section story-section" id="story">
-          <p className="eyebrow">Our story</p>
-          <h2>A fresh idea, made playful.</h2>
-          <p>
-            Zest is a fictional brand created for this frontend and UI/UX
-            portfolio project.
-          </p>
+        <section className="preview-section discovery-section" id="story" aria-labelledby="discovery-title">
+          <p className="eyebrow">Follow your curiosity</p>
+          <h2 id="discovery-title">Find your bright side.</h2>
+          <form className="discovery-search" onSubmit={(event) => { event.preventDefault(); document.getElementById('discovery-results')?.focus() }} role="search">
+            <label className="sr-only" htmlFor="zest-search">Search Zest</label>
+            <input id="zest-search" type="search" value={searchQuery} onChange={(event) => { setSearchQuery(event.target.value); setActiveTopic('') }} placeholder="What are you in the mood for?" />
+            <button type="submit" aria-label="Search Zest"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6M19 2v6M16 5h6" /></svg></button>
+          </form>
+          <div className="topic-chips" role="group" aria-label="Explore Zest topics">
+            {discoveryTopics.map((topic) => <button type="button" key={topic.title} aria-pressed={activeTopic === topic.title} onClick={() => { setActiveTopic(activeTopic === topic.title ? '' : topic.title); setSearchQuery('') }}><span aria-hidden="true">＋</span>{topic.title}</button>)}
+          </div>
+          {(query || activeTopic) && <div className="discovery-results" id="discovery-results" tabIndex={-1}>
+            <p role="status">{searchResults.length ? `${searchResults.length} bright idea${searchResults.length === 1 ? '' : 's'} to explore` : 'No matches yet. Try “lime”, “story”, or “bubbles”.'}</p>
+            {searchResults.map((topic) => <a href={topic.href} key={topic.title}><strong>{topic.title} ↗</strong><span>{topic.text}</span></a>)}
+          </div>}
         </section>
-      </main>
 
 <section
   className="preview-section"
@@ -313,6 +367,7 @@ const selectedFlavour =
 </section>
 
 
+      </main>
       <footer className="site-footer">
         <a className="logo" href="#home" aria-label="Zest home">
           zest<span>.</span>

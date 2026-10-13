@@ -39,6 +39,15 @@ const flavours: Flavour[] = [
   },
 ]
 
+const ingredientStories = [
+  { title: 'Sparkling water', category: 'The bubbles', description: 'A crisp, bubbly beginning for every bright idea.', image: '/images/sparkling-water.svg', colour: '#bcebdd' },
+  { title: 'Orange, with a little attitude.', category: 'Orange burst', description: 'Sunshine-inspired citrus with a playful sparkling finish.', image: '/images/citrus.svg', colour: '#f9c96d' },
+  { title: 'A playful finish', category: 'The personality', description: 'Bold packaging. Bright colours. A little joy in every imagined sip.', image: '/images/zest-fruit-splash.png', colour: '#f5b9cd' },
+  { title: 'A fresh little lift.', category: 'Lime splash', description: 'A zippy lime-inspired personality for your everyday pause.', image: '/images/citrus.svg', colour: '#d8edac', hue: 45 },
+  { title: 'Turn up the colour.', category: 'Berry bright', description: 'A berry-inspired burst that brings the bright side out.', image: '/images/zest-fruit-splash.png', colour: '#f5b9cd' },
+  { title: 'Small moments. More fizz.', category: 'Everyday Zest', description: 'A bubbly concept for catch-ups, sunny afternoons, and fresh starts.', image: '/images/sparkling-water.svg', colour: '#c6ddef', hue: 30 },
+]
+
 const discoveryTopics = [
   { title: 'Our flavours', keywords: 'orange lime berry fruit flavours', text: 'Three bold personalities. One bright side. Explore orange, lime, and berry in the hero above.', href: '#flavour-selector' },
   { title: 'The Zest story', keywords: 'about story design brand', text: 'A little everyday optimism, bottled up in a colourful sparkling drink concept.', href: '#about' },
@@ -49,6 +58,7 @@ const discoveryTopics = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
+  const [cardsPaused, setCardsPaused] = useState(false)
 
   useEffect(() => {
     const updateHeader = () => setHeaderScrolled(window.scrollY > 24)
@@ -288,24 +298,25 @@ const selectedFlavour =
     Ingredient details below are illustrative.
   </p>
 
-  <div className="ingredient-grid">
-    <article className="ingredient-card">
-      <span className="ingredient-number" aria-hidden="true">01</span>
-      <h3>Sparkling water</h3>
-      <p>A bubbly base for the drink concept.</p>
-    </article>
-
-    <article className="ingredient-card">
-      <span className="ingredient-number" aria-hidden="true">02</span>
-      <h3>Fruit flavours</h3>
-      <p>Orange, lime, and berry inspire our three colourful varieties.</p>
-    </article>
-
-    <article className="ingredient-card">
-      <span className="ingredient-number" aria-hidden="true">03</span>
-      <h3>A playful finish</h3>
-      <p>Bold packaging and a little personality in every imagined sip.</p>
-    </article>
+  <div className="stories-controls">
+    <button type="button" onClick={() => setCardsPaused((current) => !current)} aria-pressed={cardsPaused}>{cardsPaused ? 'Play the stories' : 'Pause the stories'} <span aria-hidden="true">{cardsPaused ? '▶' : 'Ⅱ'}</span></button>
+  </div>
+  <div className={`story-marquees ${cardsPaused ? 'is-paused' : ''}`}>
+    {[ingredientStories.slice(0, 3), ingredientStories.slice(3)].map((row, rowIndex) => (
+      <div className={`story-marquee ${rowIndex === 1 ? 'is-reversed' : ''}`} key={rowIndex}>
+        <div className="story-track">
+          {[0, 1].map((copy) => <div className="story-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
+            {row.map((story) => <article className="story-card" key={story.title} tabIndex={copy === 0 ? 0 : -1}>
+              <div className="story-image" style={{ backgroundColor: story.colour }}>
+                <img src={story.image} alt="" width="600" height="600" loading="lazy" style={{ filter: `hue-rotate(${story.hue ?? 0}deg)` }} />
+                <span className="story-tag">{story.category}</span>
+              </div>
+              <div className="story-caption"><h3>{story.title}</h3><p>{story.description}</p></div>
+            </article>)}
+          </div>)}
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 

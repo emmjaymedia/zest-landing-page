@@ -381,3 +381,229 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Rounded, overlapping section panels */
+
+main {
+  isolation: isolate;
+}
+
+main > section {
+  position: relative;
+  background: var(--cream);
+  scroll-margin-top: 32px;
+}
+
+main > .preview-section {
+  width: min(100% - 2rem, 1280px);
+  margin-top: -1rem;
+  padding: clamp(2rem, 5vw, 5rem);
+  border: 1px solid #d9cdbb;
+  border-radius: clamp(1.5rem, 4vw, 3.5rem);
+  box-shadow: 0 -12px 32px rgb(36 34 31 / 6%);
+}
+
+main > #home {
+  z-index: 1;
+}
+
+main > #flavours {
+  z-index: 2;
+  background: #fff0d8;
+}
+
+main > #ingredients {
+  z-index: 3;
+  background: #edf3dd;
+}
+
+main > #story {
+  z-index: 4;
+  background: #fce5ed;
+}
+
+main > #faq {
+  z-index: 5;
+  background: var(--cream);
+}
+
+/* Only pin panels that fit comfortably on desktop. */
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  main > section.can-stack {
+    position: sticky;
+    top: 32px;
+  }
+}
+
+/* Smooth interaction feedback */
+
+.button,
+.flavour-option {
+  transition:
+    transform 220ms ease-in-out,
+    background-color 220ms ease-in-out,
+    border-color 220ms ease-in-out;
+}
+
+.button:hover,
+.flavour-option:hover {
+  transform: translateY(-3px);
+}
+
+.button:active,
+.flavour-option:active {
+  transform: translateY(0);
+}
+
+.hero-art,
+.drink-can {
+  transition: background-color 450ms ease-in-out;
+}
+
+@keyframes can-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-12deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(-9deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .drink-can {
+    animation: can-float 3.5s ease-in-out 2;
+  }
+}
+
+@media (max-width: 899px) {
+  main > .preview-section {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  main > section.can-stack {
+    position: relative;
+    top: auto;
+  }
+
+  .button,
+  .flavour-option,
+  .hero-art,
+  .drink-can {
+    transition: none;
+    animation: none;
+  }
+
+  .button:hover,
+  .flavour-option:hover {
+    transform: none;
+  }
+}
+
+.splash-art {
+  position: relative;
+  overflow: hidden;
+  gap: 0;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.splash-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.splash-product {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 480px);
+  height: auto;
+  filter: drop-shadow(0 18px 16px rgb(36 34 31 / 15%));
+}
+
+.splash-ring {
+  position: absolute;
+  width: 65%;
+  aspect-ratio: 1;
+  border: 12px solid rgb(255 255 255 / 65%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+@keyframes fruit-burst {
+  0% {
+    opacity: 0;
+    transform: translateY(65px) scale(0.65) rotate(-8deg);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1.04) rotate(2deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+@keyframes splash-expand {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  25% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes product-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .splash-product {
+    animation:
+      fruit-burst 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+      product-drift 3s ease-in-out 900ms 2;
+  }
+
+  .splash-ring {
+    animation: splash-expand 850ms ease-out 100ms both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-product,
+  .splash-ring {
+    animation: none;
+  }
+}

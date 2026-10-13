@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 type FlavourId = 'orange' | 'lime' | 'berry'
@@ -43,6 +43,76 @@ function App() {
 
 const selectedFlavour =
   flavours.find((flavour) => flavour.id === selectedFlavourId) ?? flavours[0]!
+
+
+  useEffect(() => {
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>('main > section'),
+  )
+
+  const motionPreference = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  )
+
+  function updateStickySections() {
+    sections.forEach((section) => {
+      const fitsViewport =
+        section.offsetHeight <= window.innerHeight - 80
+
+      section.classList.toggle(
+        'can-stack',
+        fitsViewport && !motionPreference.matches,
+      )
+    })
+  }
+
+  const resizeObserver = new ResizeObserver(updateStickySections)
+  sections.forEach((section) => resizeObserver.observe(section))
+
+  const entranceObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+
+        if (!motionPreference.matches) {
+          const elements = Array.from(entry.target.children)
+
+          elements.forEach((element, index) => {
+            element.animate(
+              [
+                { opacity: 0, transform: 'translateY(24px)' },
+                { opacity: 1, transform: 'translateY(0)' },
+              ],
+              {
+                duration: 650,
+                delay: index * 70,
+                easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                fill: 'backwards',
+              },
+            )
+          })
+        }
+
+        entranceObserver.unobserve(entry.target)
+      })
+    },
+    { threshold: 0.12 },
+  )
+
+  sections.forEach((section) => entranceObserver.observe(section))
+
+  updateStickySections()
+  window.addEventListener('resize', updateStickySections)
+  motionPreference.addEventListener('change', updateStickySections)
+
+  return () => {
+    resizeObserver.disconnect()
+    entranceObserver.disconnect()
+    window.removeEventListener('resize', updateStickySections)
+    motionPreference.removeEventListener('change', updateStickySections)
+    sections.forEach((section) => section.classList.remove('can-stack'))
+  }
+}, [])
 
   function closeMenu() {
     setMenuOpen(false)
@@ -104,23 +174,30 @@ const selectedFlavour =
             </a>
           </div>
 
-        <div className="hero-art"
-          aria-hidden="true"
-          style={{ backgroundColor: selectedFlavour.background }}
-        >
-          <div
-            className="drink-can"
-            style={{ backgroundColor: selectedFlavour.colour }}
-          >
-            <span className="can-brand">zest.</span>
-            <span className="can-flavour">{selectedFlavour.name}</span>
-            <span className="can-detail">Sparkling fruit drink</span>
-          </div>
-          <span className="art-caption">Meet your bright side.</span>
-        </div>
-        </section>
+        <div
+  
+  className="hero-art splash-art"
+  aria-hidden="true"
+  style={{ backgroundColor: selectedFlavour.background }}
+>
+  <div className="splash-stage" key={selectedFlavourId}>
+    <span className="splash-ring" />
 
-        <section
+    <img
+      className="splash-product"
+      src="/images/zest-fruit-splash.png"
+      alt=""
+      width="1280"
+      height="1280"
+      fetchPriority="high"
+    />
+  </div>
+
+    <span className="art-caption">Meet your bright side.</span>
+</div>
+</section>
+
+<section
   className="preview-section"
   id="flavours"
   aria-labelledby="flavours-title"

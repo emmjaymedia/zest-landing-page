@@ -40,12 +40,12 @@ const flavours: Flavour[] = [
 ]
 
 const ingredientStories = [
-  { title: 'Sparkling water', category: 'The bubbles', description: 'A crisp, bubbly beginning for every bright idea.', image: '/images/sparkling-water.svg', colour: '#bcebdd' },
-  { title: 'Orange, with a little attitude.', category: 'Orange burst', description: 'Sunshine-inspired citrus with a playful sparkling finish.', image: '/images/citrus.svg', colour: '#f9c96d' },
-  { title: 'A playful finish', category: 'The personality', description: 'Bold packaging. Bright colours. A little joy in every imagined sip.', image: '/images/zest-fruit-splash.png', colour: '#f5b9cd' },
-  { title: 'A fresh little lift.', category: 'Lime splash', description: 'A zippy lime-inspired personality for your everyday pause.', image: '/images/citrus.svg', colour: '#d8edac', hue: 45 },
-  { title: 'Turn up the colour.', category: 'Berry bright', description: 'A berry-inspired burst that brings the bright side out.', image: '/images/zest-fruit-splash.png', colour: '#f5b9cd' },
-  { title: 'Small moments. More fizz.', category: 'Everyday Zest', description: 'A bubbly concept for catch-ups, sunny afternoons, and fresh starts.', image: '/images/sparkling-water.svg', colour: '#c6ddef', hue: 30 },
+  { title: 'Sunshine in every sip.', category: 'Orange burst', description: 'Bright citrus, a little fizz, and a whole lot of good energy.', colour: '#f9c96d', hue: 55 },
+  { title: 'Keep it fresh.', category: 'Lime splash', description: 'A crisp lime-inspired lift for your everyday pause.', colour: '#d8edac', hue: 110 },
+  { title: 'Find your bright side.', category: 'Berry bright', description: 'A colourful berry-inspired burst with a playful finish.', colour: '#f5b9cd', hue: 0 },
+  { title: 'Take the scenic sip.', category: 'Tropical twist', description: 'A sunny tropical flavour concept for a little everyday escape.', colour: '#ffd6a1', hue: 35 },
+  { title: 'A softer kind of sparkle.', category: 'Peach glow', description: 'A mellow peach-inspired personality with a bright, bubbly spirit.', colour: '#f8cec0', hue: 20 },
+  { title: 'Go a little wild.', category: 'Grape groove', description: 'A bold grape-inspired concept that brings its own rhythm.', colour: '#dfc7f4', hue: 290 },
 ]
 
 const discoveryTopics = [
@@ -58,7 +58,6 @@ const discoveryTopics = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
-  const [cardsPaused, setCardsPaused] = useState(false)
 
   useEffect(() => {
     const updateHeader = () => setHeaderScrolled(window.scrollY > 24)
@@ -298,17 +297,13 @@ const selectedFlavour =
     Ingredient details below are illustrative.
   </p>
 
-  <div className="stories-controls">
-    <button type="button" onClick={() => setCardsPaused((current) => !current)} aria-pressed={cardsPaused}>{cardsPaused ? 'Play the stories' : 'Pause the stories'} <span aria-hidden="true">{cardsPaused ? '▶' : 'Ⅱ'}</span></button>
-  </div>
-  <div className={`story-marquees ${cardsPaused ? 'is-paused' : ''}`}>
-    {[ingredientStories.slice(0, 3), ingredientStories.slice(3)].map((row, rowIndex) => (
-      <div className={`story-marquee ${rowIndex === 1 ? 'is-reversed' : ''}`} key={rowIndex}>
+  <div className="story-marquees">
+      <div className="story-marquee">
         <div className="story-track">
           {[0, 1].map((copy) => <div className="story-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
-            {row.map((story) => <article className="story-card" key={story.title} tabIndex={copy === 0 ? 0 : -1}>
+            {ingredientStories.map((story) => <article className="story-card" key={story.title} tabIndex={copy === 0 ? 0 : -1}>
               <div className="story-image" style={{ backgroundColor: story.colour }}>
-                <img src={story.image} alt="" width="600" height="600" loading="lazy" style={{ filter: `hue-rotate(${story.hue ?? 0}deg)` }} />
+                <img src="/images/zest-fruit-splash.png" alt="" width="600" height="600" loading="lazy" style={{ filter: `hue-rotate(${story.hue ?? 0}deg)` }} />
                 <span className="story-tag">{story.category}</span>
               </div>
               <div className="story-caption"><h3>{story.title}</h3><p>{story.description}</p></div>
@@ -316,7 +311,6 @@ const selectedFlavour =
           </div>)}
         </div>
       </div>
-    ))}
   </div>
 </section>
 

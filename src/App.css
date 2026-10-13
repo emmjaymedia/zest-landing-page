@@ -727,3 +727,6 @@ main > #ingredients { width: min(100% - 2rem, 1440px); padding-inline: clamp(1re
   .story-card:hover, .story-card:focus-visible, .story-card:hover img, .story-card:focus-visible img { transform: none; }
   .stories-controls { display: none; }
 }
+
+.story-track { animation-duration: 55s; }
+.story-image img { padding: 0.25rem; }

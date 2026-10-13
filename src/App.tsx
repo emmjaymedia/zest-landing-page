@@ -9,6 +9,7 @@ type Flavour = {
   description: string
   colour: string
   background: string
+  hue: number
 }
 
 const flavours: Flavour[] = [
@@ -18,6 +19,7 @@ const flavours: Flavour[] = [
     description: 'A bright citrus flavour with a playful sparkling finish.',
     colour: '#ff7518',
     background: '#ffdfb6',
+    hue: 55,
   },
   {
     id: 'lime',
@@ -25,6 +27,7 @@ const flavours: Flavour[] = [
     description: 'A crisp lime flavour imagined for a refreshing little lift.',
     colour: '#b4df52',
     background: '#e7f2ca',
+    hue: 110,
   },
   {
     id: 'berry',
@@ -32,6 +35,7 @@ const flavours: Flavour[] = [
     description: 'A lively berry flavour with a colourful personality.',
     colour: '#f58bb0',
     background: '#fce0eb',
+    hue: 0,
   },
 ]
 
@@ -144,11 +148,11 @@ const selectedFlavour =
           className={`navigation ${menuOpen ? 'is-open' : ''}`}
           aria-label="Main navigation"
         >
-          <a href="#flavours" onClick={closeMenu}>
+          <a href="#flavour-selector" onClick={closeMenu}>
             Flavours
           </a>
-          <a href="#story" onClick={closeMenu}>
-            Our story
+          <a href="#about" onClick={closeMenu}>
+            About us
           </a>
         </nav>
       </header>
@@ -169,7 +173,7 @@ const selectedFlavour =
               on your everyday refreshment.
             </p>
 
-            <a className="button" href="#flavours">
+            <a className="button" href="#flavour-selector">
               Explore flavours <span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -177,7 +181,6 @@ const selectedFlavour =
         <div
   
   className="hero-art splash-art"
-  aria-hidden="true"
   style={{ backgroundColor: selectedFlavour.background }}
 >
   <div className="splash-stage" key={selectedFlavourId}>
@@ -186,64 +189,41 @@ const selectedFlavour =
     <img
       className="splash-product"
       src="/images/zest-fruit-splash.png"
-      alt=""
+      alt={`Zest ${selectedFlavour.name} can with a fruit splash`}
+      style={{ filter: `hue-rotate(${selectedFlavour.hue}deg) drop-shadow(0 18px 16px rgb(36 34 31 / 15%))` }}
       width="1280"
       height="1280"
       fetchPriority="high"
     />
   </div>
 
-    <span className="art-caption">Meet your bright side.</span>
+  <div className="flavour-options" id="flavour-selector" role="group" aria-label="Choose a flavour">
+    {flavours.map((flavour) => (
+      <button key={flavour.id} type="button"
+        className={`flavour-option ${flavour.id === selectedFlavourId ? 'is-selected' : ''}`}
+        style={{ backgroundColor: flavour.colour }}
+        aria-label={flavour.name}
+        aria-pressed={flavour.id === selectedFlavourId}
+        onClick={() => setSelectedFlavourId(flavour.id)}
+      />
+    ))}
+  </div>
+  <span className="art-caption" role="status" aria-label={`${selectedFlavour.name} selected`}>Meet your bright side.</span>
 </div>
 </section>
 
-<section
-  className="preview-section"
-  id="flavours"
-  aria-labelledby="flavours-title"
->
-  <p className="eyebrow">Pick your personality</p>
-  <h2 id="flavours-title">Good things come in flavours.</h2>
-  <p>Choose a flavour to give the Zest can a fresh look.</p>
-
-  <div
-    className="flavour-options"
-    role="group"
-    aria-label="Choose a flavour"
-  >
-    {flavours.map((flavour) => {
-      const isSelected = flavour.id === selectedFlavourId
-
-      return (
-        <button
-          key={flavour.id}
-          type="button"
-          className={`flavour-option ${isSelected ? 'is-selected' : ''}`}
-          aria-pressed={isSelected}
-          onClick={() => setSelectedFlavourId(flavour.id)}
-        >
-          <span
-            className="flavour-swatch"
-            style={{ backgroundColor: flavour.colour }}
-            aria-hidden="true"
-          />
-          {flavour.name}
-          {isSelected && (
-            <span className="flavour-check" aria-hidden="true">
-              ✓
-            </span>
-          )}
-        </button>
-      )
-    })}
+<section className="preview-section about-section" id="about" aria-labelledby="about-title">
+  <div className="about-copy">
+    <p className="eyebrow">About us</p>
+    <h2 id="about-title">A brighter take on everyday refreshment.</h2>
+    <p>We believe the little moments deserve a little more fizz. A catch-up with friends, a sunny afternoon, or a pause between big ideas — Zest brings a splash of colour and a playful spirit to the everyday.</p>
+    <p>Our sparkling drink concept celebrates bold fruit flavours, joyful design, and the simple pleasure of trying something fresh. From Orange burst to Lime splash and Berry bright, every personality has a bright side.</p>
+    <p className="about-note">Zest is a fictional brand, imagined as a UI/UX and frontend portfolio project.</p>
   </div>
-
-  <div className="flavour-description" role="status">
-    <h3>{selectedFlavour.name}</h3>
-    <p>{selectedFlavour.description}</p>
+  <div className="about-art" style={{ backgroundColor: selectedFlavour.background }}>
+    <img src="/images/zest-fruit-splash.png" alt={`Zest ${selectedFlavour.name} product preview`} width="1280" height="1280" loading="lazy" style={{ filter: `hue-rotate(${selectedFlavour.hue}deg)` }} />
   </div>
 </section>
-
 
 <section
   className="preview-section"
@@ -337,7 +317,7 @@ const selectedFlavour =
         <a className="logo" href="#home" aria-label="Zest home">
           zest<span>.</span>
         </a>
-        <p>Portfolio concept · No products available for sale.</p>
+        <a className="developer-credit" href="https://a-majid-portfolio-mauve.vercel.app/">Developed by A. Majid <span aria-hidden="true">↗</span></a>
       </footer>
     </>
   )

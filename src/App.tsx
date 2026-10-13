@@ -78,7 +78,7 @@ function App() {
         const index = flavours.findIndex((flavour) => flavour.id === current)
         return flavours[(index + 1) % flavours.length]!.id
       })
-    }, 4500)
+    }, 2500)
     return () => window.clearInterval(timer)
   }, [isCycling, artPaused, reducedMotion])
 
@@ -99,7 +99,7 @@ const selectedFlavour =
   function updateStickySections() {
     sections.forEach((section) => {
       const fitsViewport =
-        section.offsetHeight <= window.innerHeight - 80
+        section.offsetHeight <= window.innerHeight - 120
 
       section.classList.toggle(
         'can-stack',
@@ -196,6 +196,8 @@ const selectedFlavour =
       </header>
 
       <main id="main">
+        <div className="hero-about" style={{ backgroundColor: selectedFlavour.background }}>
+
         <section className="hero" id="home" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow">A sparkling drink concept</p>
@@ -259,18 +261,12 @@ const selectedFlavour =
 </div>
 </section>
 
-<section className="preview-section about-section" id="about" aria-labelledby="about-title">
-  <div className="about-copy">
-    <p className="eyebrow">About us</p>
-    <h2 id="about-title">A brighter take on everyday refreshment.</h2>
-    <p>We believe the little moments deserve a little more fizz. A catch-up with friends, a sunny afternoon, or a pause between big ideas — Zest brings a splash of colour and a playful spirit to the everyday.</p>
-    <p>Our sparkling drink concept celebrates bold fruit flavours, joyful design, and the simple pleasure of trying something fresh. From Orange burst to Lime splash and Berry bright, every personality has a bright side.</p>
-    <p className="about-note">Zest is a fictional brand, imagined as a UI/UX and frontend portfolio project.</p>
-  </div>
-  <div className="about-art" style={{ backgroundColor: selectedFlavour.background }}>
-    <img src="/images/zest-fruit-splash.png" alt={`Zest ${selectedFlavour.name} product preview`} width="1280" height="1280" loading="lazy" style={{ filter: `hue-rotate(${selectedFlavour.hue}deg)` }} />
-  </div>
+<section className="about-statement" id="about" aria-labelledby="about-title">
+  <p className="eyebrow">A little about Zest</p>
+  <h2 id="about-title">At Zest, we’re bringing a brighter spirit to everyday moments — one sip, one spark, one little burst of joy at a time.</h2>
+  <span className="button about-cta">Discover our flavours <span aria-hidden="true">↗</span></span>
 </section>
+        </div>
 
 <section
   className="preview-section"

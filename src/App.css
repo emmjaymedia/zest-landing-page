@@ -685,3 +685,15 @@ main > section { scroll-margin-top: 112px; }
   .about-statement { padding-top: 2rem; }
 }
 @media (prefers-reduced-motion: reduce) { .hero-about { transition: none; } }
+
+.site-header {
+  transition: background-color 250ms ease, box-shadow 250ms ease, border-color 250ms ease, backdrop-filter 250ms ease;
+}
+.site-header.is-at-top {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+@media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }

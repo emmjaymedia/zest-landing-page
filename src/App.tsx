@@ -48,6 +48,14 @@ const discoveryTopics = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [headerScrolled, setHeaderScrolled] = useState(false)
+
+  useEffect(() => {
+    const updateHeader = () => setHeaderScrolled(window.scrollY > 24)
+    updateHeader()
+    window.addEventListener('scroll', updateHeader, { passive: true })
+    return () => window.removeEventListener('scroll', updateHeader)
+  }, [])
   const [selectedFlavourId, setSelectedFlavourId] =
   useState<FlavourId>('orange')
 
@@ -166,7 +174,7 @@ const selectedFlavour =
         Skip to content
       </a>
 
-      <header className="site-header">
+      <header className={`site-header ${headerScrolled || menuOpen ? 'is-scrolled' : 'is-at-top'}`}>
         <a className="logo" href="#home" aria-label="Zest home">
           zest<span>.</span>
         </a>
